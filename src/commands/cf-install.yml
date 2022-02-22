@@ -1,0 +1,21 @@
+description: >
+  Installs the CloudFoundry CLI tool
+parameters:
+  space:
+    type: string
+  version:
+    type: string
+    default: "7.4.0"
+steps:
+  - run:
+      name: "Setup CF CLI"
+      command: |
+        curl -L -o cf.deb --retry 3 'https://packages.cloudfoundry.org/stable?release=debian64&version=<< parameters.version >>&source=github-rel'
+        file cf.deb
+        sudo dpkg -i cf.deb
+        cf -v
+        cf api "$CF_ENDPOINT"
+        cf auth "$CF_USER" "$CF_PASSWORD"
+        cf add-plugin-repo CF-Community https://plugins.cloudfoundry.org
+        cf install-plugin app-autoscaler-plugin -r CF-Community -f
+        cf target -o "$CF_ORG" -s "<< parameters.space >>"
