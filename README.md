@@ -1,9 +1,8 @@
-# Orb Project Template
+# Trade Tariff CI Orb
 
 [![CircleCI Build Status](https://circleci.com/gh/trade-tariff/trade-tariff-ci-orb.svg?style=shield "CircleCI Build Status")](https://circleci.com/gh/trade-tariff/trade-tariff-ci-orb) [![CircleCI Orb Version](https://badges.circleci.com/orbs/trade-tariff/trade-tariff-ci-orb.svg)](https://circleci.com/orbs/registry/orb/trade-tariff/trade-tariff-ci-orb) [![GitHub License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/trade-tariff/trade-tariff-ci-orb/master/LICENSE) [![CircleCI Community](https://img.shields.io/badge/community-CircleCI%20Discuss-343434.svg)](https://discuss.circleci.com/c/ecosystem/orbs)
 
-
-A starter template for orb projects. Build, test, and publish orbs automatically on CircleCI with [Orb-Tools](https://circleci.com/orbs/registry/orb/circleci/orb-tools).
+This project contains commands and jobs to be used across the CI pipelines in the other Trade Tariff repos
 
 Additional READMEs are available in each directory.
 
@@ -15,7 +14,7 @@ Additional READMEs are available in each directory.
 
 ### How to Contribute
 
-We welcome [issues](https://github.com/trade-tariff/trade-tariff-ci-orb/issues) to and [pull requests](https://github.com/trade-tariff/trade-tariff-ci-orb/pulls) against this repository!
+Raise a pull request [pull requests](https://github.com/trade-tariff/trade-tariff-ci-orb/pulls) against this repository!
 
 ### How to Publish
 * Create and push a branch with your new features.
@@ -31,8 +30,8 @@ We welcome [issues](https://github.com/trade-tariff/trade-tariff-ci-orb/issues) 
 
 Example: `[semver:major]`
 
-* Squash and merge. Ensure the semver tag is preserved and entered as a part of the commit message.
-* On merge, after manual approval, the orb will automatically be published to the Orb Registry.
+* Squash and merge. Ensure the semver tag `[semver:patch]` is preserved and entered as a part of the first line (title) of the commit message.
+* On merge, the orb will be automatically published to the repository
 
 For further questions/comments about this or other orbs, visit the Orb Category of [CircleCI Discuss](https://discuss.circleci.com/c/orbs).
 
