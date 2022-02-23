@@ -1,0 +1,36 @@
+description: >
+  Generates the release notes
+parameters:
+  release-version-file:
+    type: string
+    default: release-details/version.txt
+  release-notes-file:
+    type: string
+    default: release-details/notes.txt
+steps:
+  - run:
+      name: Generate release notes
+      command: |
+        mkdir -p $(dirname << parameters.release-version-file >>)
+        mkdir -p $(dirname << parameters.release-notes-file >>)
+
+        NEW_RELEASE=$(date +"%Y%m%d-%H%M")
+        echo "${NEW_RELEASE}" > << parameters.release-version-file >>
+        echo "export NEW_RELEASE='${NEW_RELEASE}'" >> $BASH_ENV
+
+        LAST_RELEASE=$(git tag --list 'release-202*-*' | sort | tail -n 1)
+        if [[ -z "${LAST_RELEASE}" ]]; then
+          echo "First release" > << parameters.release-notes-file >>
+        else
+          git log --merges --format=format:"* %b" $LAST_RELEASE..HEAD > << parameters.release-notes-file >>
+
+          if [[ ! -s release-details/notes.txt ]]; then
+            echo "No merged changes - possible re-release" > << parameters.release-notes-file >>
+          fi
+        fi
+  - run:
+      name: List changes
+      command: |
+        echo "Release $(< << parameters.release-version-file >>)"
+        echo ""
+        cat << parameters.release-notes-file >>
