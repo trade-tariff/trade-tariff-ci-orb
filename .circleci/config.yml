@@ -91,6 +91,4 @@ workflows:
           filters:
             branches:
               only:
-                - deactivated-for-now
-                # - master
-                # - main
+                - main
