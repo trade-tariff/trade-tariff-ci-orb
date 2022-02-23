@@ -50,8 +50,6 @@ workflows:
           path: ./src/tests
       # Publish development version(s) of the orb.
       - orb-tools/publish-dev:
-          name: publish-dev-branch
-          alpha-version-ref: "dev:alpha"
           orb-name: trade-tariff/trade-tariff-ci-orb
           context: orb-publishing # A restricted context containing your private publishing credentials. Will only execute if approved by an authorized user.
           requires:
@@ -59,31 +57,13 @@ workflows:
             - orb-tools/pack
             - bats/run
             - shellcheck/check
-          filters:
-            branches:
-              ignore:
-                - main
-      - orb-tools/publish-dev:
-          name: publish-dev-mainline
-          alpha-version-ref: "dev:main"
-          orb-name: trade-tariff/trade-tariff-ci-orb
-          context: orb-publishing # A restricted context containing your private publishing credentials. Will only execute if approved by an authorized user.
-          requires:
-            - orb-tools/lint
-            - orb-tools/pack
-            - bats/run
-            - shellcheck/check
-          filters:
-            branches:
-              only:
-                - main
       # Trigger an integration workflow to test the
       # dev:${CIRCLE_SHA1:0:7} version of your orb
       - orb-tools/trigger-integration-tests-workflow:
           name: trigger-integration-dev
           context: orb-publishing
           requires:
-            - publish-dev-mainline
+            - orb-tools/publish-dev
 
   # This `integration-test_deploy` workflow will only run
   # when the run-integration-tests pipeline parameter is set to true.
@@ -104,7 +84,7 @@ workflows:
           orb-name: trade-tariff/trade-tariff-ci-orb
           context: orb-publishing
           add-pr-comment: false
-          fail-if-semver-not-indicated: false
+          fail-if-semver-not-indicated: true
           publish-version-tag: false
           requires:
             - integration-test-1
