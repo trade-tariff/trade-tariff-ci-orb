@@ -4,6 +4,8 @@ description: >
 parameters:
   slack-channel:
     type: string
+  app-name:
+    type: string
 
 steps:
   - run:
@@ -39,7 +41,7 @@ steps:
               "type": "header",
               "text": {
                 "type": "plain_text",
-                "text": "New release ${RELEASE_NAME} for Admin :tada:",
+                "text": "New release ${RELEASE_NAME} for << parameters.app-name >> :tada:",
                 "emoji": true
               }
             },
