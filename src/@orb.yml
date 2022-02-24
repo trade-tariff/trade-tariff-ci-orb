@@ -13,3 +13,4 @@ description: >
 # If your orb requires other orbs, you can import them like this. Otherwise remove the "orbs" stanza.
 orbs:
   aws-cli: circleci/aws-cli@2.0.3
+  gh: circleci/github-cli@1.0
