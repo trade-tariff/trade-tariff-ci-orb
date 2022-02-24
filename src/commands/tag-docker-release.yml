@@ -1,0 +1,38 @@
+description: >
+  Tag the docker image with the release
+
+parameters:
+  release-version-file:
+    type: string
+    default: release-details/version.txt
+  image-name:
+    type: string
+
+steps:
+  - setup_remote_docker:
+      version: 20.10.11
+      docker_layer_caching: false
+  - aws-cli/install
+  - run:
+      name: Tag Docker Image as production release
+      command: |
+        RELEASE_VERSION=$(< << parameters.release-version-file >>)
+        echo "RELEASE_VERSION is '${RELEASE_VERSION}'"
+
+        if [ -z "${ECR_REPO}" ]; then
+          echo "Missing ECR_REPO"
+          exit 1
+        fi
+
+        if [ -z "${RELEASE_VERSION}" ]; then
+          echo "Missing RELEASE_VERSION"
+          exit 1
+        fi
+
+        DOCKER_IMAGE="${ECR_REPO}/<< parameters.image-name >>"
+        IMAGE_TAG="release-${RELEASE_VERSION}"
+
+        aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin $ECR_REPO
+        docker pull "${DOCKER_IMAGE}:${CIRCLE_SHA1}"
+        docker tag "${DOCKER_IMAGE}:${CIRCLE_SHA1}" "${DOCKER_IMAGE}:${IMAGE_TAG}"
+        docker push "${DOCKER_IMAGE}:${IMAGE_TAG}"

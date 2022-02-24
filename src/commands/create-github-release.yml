@@ -1,0 +1,23 @@
+description: >
+  Create release in GitHub
+
+parameters:
+  release-version-file:
+    type: string
+    default: release-details/version.txt
+  release-notes-file:
+    type: string
+    default: release-details/notes.txt
+
+steps:
+  - gh/setup
+  - run:
+      name: Check this is updating
+      command: which gh
+  - run:
+      name: Create GitHub release
+      command: |
+        gh release create release-$(< << parameters.release-version-file >>) \
+          --notes-file << parameters.release-notes-file >> \
+          --title "Release $(< << parameters.release-version-file >>)" \
+          --target "${CIRCLE_SHA1}"
