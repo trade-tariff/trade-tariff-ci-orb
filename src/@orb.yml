@@ -14,3 +14,4 @@ description: >
 orbs:
   aws-cli: circleci/aws-cli@2.0.3
   gh: circleci/github-cli@1.0
+  slack: circleci/slack@4.3.0

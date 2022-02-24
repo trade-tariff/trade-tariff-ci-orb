@@ -1,0 +1,54 @@
+description: >
+  Publish release notes for current tag release to Slack
+
+parameters:
+  slack-channel:
+    type: string
+
+steps:
+  - run:
+      name: Read release name
+      command: |
+        RELEASE_NAME=$(echo "${CIRCLE_TAG}" | sed 's/^release-//')
+        echo "export RELEASE_NAME='${RELEASE_NAME}'" >> $BASH_ENV
+        echo "Found release ${RELEASE_NAME}"
+  - run:
+      name: Fetch release notes
+      command: |
+        echo "Checking release release-${RELEASE_NAME}"
+        REPO_API_URL=$(echo "${CIRCLE_REPOSITORY_URL}/" | sed 's|.git/$||' | sed 's|git@github.com:|https://api.github.com/repos/|')
+        curl --silent --show-error "${REPO_API_URL}/releases/tags/release-${RELEASE_NAME}" | jq -ar .body > release-notes.txt
+  - run:
+      name: Clean up notes
+      command: |
+        sed -i 's/\\"//g' release-notes.txt
+        sed -i "s/\\'//g" release-notes.txt
+        sed -i 's/"//g' release-notes.txt
+        sed -i "s/'//g" release-notes.txt
+        echo 'export RELEASE_NOTES="$(< release-notes.txt)"' >> $BASH_ENV
+  - run:
+      name: Display release notes
+      command: echo ${RELEASE_NOTES}
+  - slack/notify:
+      channel: << parameters.slack-channel >>
+      event: pass
+      custom: |
+        {
+          "blocks": [
+            {
+              "type": "header",
+              "text": {
+                "type": "plain_text",
+                "text": "New release ${RELEASE_NAME} for Admin :tada:",
+                "emoji": true
+              }
+            },
+            {
+              "type": "section",
+              "text": {
+                "type": "mrkdwn",
+                "text": "${RELEASE_NOTES}"
+              }
+            }
+          ]
+        }

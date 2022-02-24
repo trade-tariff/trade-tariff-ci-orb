@@ -1,5 +1,6 @@
 description: >
   Generates the release notes
+
 parameters:
   release-version-file:
     type: string
@@ -7,6 +8,7 @@ parameters:
   release-notes-file:
     type: string
     default: release-details/notes.txt
+
 steps:
   - run:
       name: Generate release notes

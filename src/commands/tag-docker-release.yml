@@ -1,11 +1,13 @@
 description: >
   Tag the docker image with the release
+
 parameters:
   release-version-file:
     type: string
     default: release-details/version.txt
   image-name:
     type: string
+
 steps:
   - setup_remote_docker:
       version: 20.10.11
