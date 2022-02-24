@@ -1,0 +1,17 @@
+description: >
+  Create a production release, ie. tag image in Docker, create a GitHub release and git tag
+
+docker:
+  - image: cimg/base:stable
+
+parameters:
+  image-name:
+    type: string
+    description: Name of docker image to use
+
+steps:
+  - checkout
+  - generate-release-notes
+  - tag-docker-release:
+      image-name: << parameters.image-name >>
+  - create-github-release
