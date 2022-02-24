@@ -33,5 +33,10 @@ Example: `[semver:major]`
 * Squash and merge. Ensure the semver tag `[semver:patch]` is preserved and entered as a part of the first line (title) of the commit message.
 * On merge, the orb will be automatically published to the repository
 
+*Notes:*
+
+* If merging multiple commits - they will be squashed and you will need to edit the commit message to add the `[semver:patch]` tag in the title
+* If merging a single commit - you will not be able to edit the commit message, so to release, the commit message must have `[semver:patch]` in the first line
+
 For further questions/comments about this or other orbs, visit the Orb Category of [CircleCI Discuss](https://discuss.circleci.com/c/orbs).
 
