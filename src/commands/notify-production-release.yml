@@ -21,7 +21,7 @@ steps:
       command: |
         echo "Checking release release-${RELEASE_NAME}"
         REPO_API_URL=$(echo "${CIRCLE_REPOSITORY_URL}/" | sed 's|.git/$||' | sed 's|git@github.com:|https://api.github.com/repos/|')
-        curl --silent --show-error "${REPO_API_URL}/releases/tags/<< parameters.release-tag >>" | jq -ar .body > release-notes.txt
+        curl --retry 3 --silent --show-error "${REPO_API_URL}/releases/tags/<< parameters.release-tag >>" | jq -ar .body > release-notes.txt
   - run:
       name: Clean up notes
       command: |
