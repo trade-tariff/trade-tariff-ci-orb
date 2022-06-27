@@ -11,7 +11,6 @@ steps:
       name: "Setup CF CLI"
       command: |
         curl -L -o cf.deb --retry 3 'https://packages.cloudfoundry.org/stable?release=debian64&version=<< parameters.version >>&source=github-rel'
-        file cf.deb
         sudo dpkg -i cf.deb
         cf -v
         cf api "$CF_ENDPOINT"
