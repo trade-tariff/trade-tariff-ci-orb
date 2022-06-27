@@ -11,7 +11,7 @@ parameters:
 
 steps:
   - run:
-      name: Read release name
+      name: Reading release name
       command: |
         RELEASE_NAME=$(echo "<< parameters.release-tag >>" | sed 's/^release-//')
         echo "export RELEASE_NAME='${RELEASE_NAME}'" >> $BASH_ENV
