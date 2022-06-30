@@ -4,7 +4,7 @@
       "type": "header",
       "text": {
         "type": "plain_text",
-        "text": "New release $RELEASE_NAME for << parameters.app-name >> :tada:",
+        "text": "New release $RELEASE_NAME for  :tada:",
         "emoji": true
       }
     },
