@@ -25,8 +25,7 @@ steps:
   - run:
       name: Cleaning up notes
       command: |
-        cat release-notes.txt | sed 's/\\/\\\\/g' | sed 's/"/\\"/g' | sed 's/`/\\`/g' > cleaned-release-notes.txt
-        echo 'export RELEASE_NOTES=$(< cleaned-release-notes.txt)' >> $BASH_ENV
+        echo 'export RELEASE_NOTES=$(< release-notes.txt)' >> $BASH_ENV
   - run:
       name: Display release notes
       command: echo "${RELEASE_NOTES}"
