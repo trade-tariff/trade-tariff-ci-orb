@@ -30,6 +30,16 @@ steps:
   - run:
       name: Display release notes
       command: echo "${RELEASE_NOTES}"
+  - run:
+      name: debug
+      command: |
+        echo "$SLACK_TEMPLATE"
+        echo "========================================="
+        T2=$(eval echo \""$SLACK_TEMPLATE"\")
+        echo "$T2"
+      environment:
+        SLACK_TEMPLATE: "<<include(templates/slack-release-notification.json)>>"
+
   - slack/notify:
       channel: << parameters.slack-channel >>
       event: pass

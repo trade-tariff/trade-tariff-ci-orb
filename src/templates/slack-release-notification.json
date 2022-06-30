@@ -1,0 +1,19 @@
+{
+  "blocks": [
+    {
+      "type": "header",
+      "text": {
+        "type": "plain_text",
+        "text": "New release $RELEASE_NAME for << parameters.app-name >> :tada:",
+        "emoji": true
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": $RELEASE_NOTES
+      }
+    }
+  ]
+}
