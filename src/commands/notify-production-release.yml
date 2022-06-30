@@ -39,29 +39,12 @@ steps:
         echo "========================================="
         T2=$(eval echo \""$CUSTOM_BODY_MODIFIED"\")
         echo "$T2"
+        echo "$T2" > generated_notes.txt
+        echo 'export GENERATED_NOTES=$(< generated_notes.txt)'
       environment:
         SLACK_TEMPLATE: "<<include(templates/slack-release-notification.json)>>"
 
   - slack/notify:
       channel: << parameters.slack-channel >>
       event: pass
-      custom: |
-        {
-          "blocks": [
-            {
-              "type": "header",
-              "text": {
-                "type": "plain_text",
-                "text": "New release $RELEASE_NAME for << parameters.app-name >> :tada:",
-                "emoji": true
-              }
-            },
-            {
-              "type": "section",
-              "text": {
-                "type": "mrkdwn",
-                "text": $RELEASE_NOTES
-              }
-            }
-          ]
-        }
+      custom: $GENERATED_NOTES
