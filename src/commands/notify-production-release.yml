@@ -35,7 +35,10 @@ steps:
       command: |
         echo "$SLACK_TEMPLATE"
         echo "========================================="
-        T2=$(eval echo \""$SLACK_TEMPLATE"\")
+        CUSTOM_BODY_MODIFIED=$(echo "$SLACK_TEMPLATE" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g' | sed 's/`/\\`/g')
+        echo "$CUSTOM_BODY_MODIFIED"
+        echo "========================================="
+        T2=$(eval echo \""$CUSTOM_BODY_MODIFIED"\")
         echo "$T2"
       environment:
         SLACK_TEMPLATE: "<<include(templates/slack-release-notification.json)>>"
