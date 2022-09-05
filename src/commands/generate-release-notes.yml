@@ -24,7 +24,7 @@ steps:
         if [[ -z "${LAST_RELEASE}" ]]; then
           echo "First release" > << parameters.release-notes-file >>
         elif [[ $(echo "$CIRCLE_BRANCH" | egrep '^hotfix\/') ]]; then
-          git log --format=format:"* %s" $LAST_RELEASE..HEAD > << parameters.release-notes-file >>
+          git log --format=format:"* %s" $LAST_RELEASE..HEAD | grep -v "* $" > << parameters.release-notes-file >>
         else
           git log --merges --format=format:"* %b" $LAST_RELEASE..HEAD > << parameters.release-notes-file >>
 
