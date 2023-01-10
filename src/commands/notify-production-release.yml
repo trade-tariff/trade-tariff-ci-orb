@@ -19,9 +19,9 @@ steps:
   - run:
       name: Fetch release notes
       command: |
-        echo "Checking release release-${RELEASE_NAME}"
-        REPO_API_URL=$(echo "${CIRCLE_REPOSITORY_URL}/" | sed 's|.git/$||' | sed 's|git@github.com:|https://api.github.com/repos/|')
-        curl --retry 3 --silent --show-error "${REPO_API_URL}/releases/tags/<< parameters.release-tag >>" | jq -ar .body > release-notes.txt
+        echo "Fetching release release-${RELEASE_NAME}"
+
+        gh release view $RELEASE_NAME --json 'body' -q '.body' > release-notes.txt
   - run:
       name: Clean up notes
       command: |

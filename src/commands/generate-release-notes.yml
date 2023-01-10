@@ -21,12 +21,13 @@ steps:
         echo "export NEW_RELEASE='${NEW_RELEASE}'" >> $BASH_ENV
 
         LAST_RELEASE=$(git tag --list 'release-202*-*' | sort | tail -n 1)
+        # First release
         if [[ -z "${LAST_RELEASE}" ]]; then
           echo "First release" > << parameters.release-notes-file >>
         elif [[ $(echo "$CIRCLE_BRANCH" | egrep '^hotfix\/') ]]; then
-          git log --format=format:"* %s" $LAST_RELEASE..HEAD | grep -v "* $" > << parameters.release-notes-file >>
+          git --no-pager log --format=format:"- %s" $LAST_RELEASE..HEAD > << parameters.release-notes-file >>
         else
-          git log --merges --format=format:"* %b" $LAST_RELEASE..HEAD > << parameters.release-notes-file >>
+          git --no-pager log --format=format:"- %b" $LAST_RELEASE..HEAD --merges --grep 'Merge pull request' > << parameters.release-notes-file >>
 
           if [[ ! -s release-details/notes.txt ]]; then
             echo "No merged changes - possible re-release" > << parameters.release-notes-file >>
