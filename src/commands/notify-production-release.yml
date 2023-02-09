@@ -10,6 +10,7 @@ parameters:
     type: string
 
 steps:
+  - gh/setup
   - run:
       name: Read release name
       command: |
