@@ -17,7 +17,7 @@ if [ "${PARAM_PLAN}" = "" ];then
 fi
 
 PR_RESPONSE=$(curl --location --request GET "https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls?head=$CIRCLE_PROJECT_USERNAME:$CIRCLE_BRANCH&state=open" \
--u $PARAM_GITHUB_USER:$PARAM_GITHUB_TOKEN)
+-u "$PARAM_GITHUB_USER":"$PARAM_GITHUB_TOKEN")
 
 if [ "$(echo ${PR_RESPONSE} | jq length)" -eq 0 ]; then
   echo "No PR found to update, skipping."
@@ -25,12 +25,12 @@ if [ "$(echo ${PR_RESPONSE} | jq length)" -eq 0 ]; then
   exit 0
 fi
 
-COMMENT=$(jo body="\`\`\`\n$(terraform show -no-color ${PARAM_PLAN})")
+COMMENT=$(jo body="\`\`\`\n$(terraform show -no-color "${PARAM_PLAN}")")
 
 PR_COMMENT_URL=$(echo ${PR_RESPONSE} | jq --raw-output ".[]._links.comments.href")
 
 curl --location --request POST "${PR_COMMENT_URL}" \
--u ${PARAM_GITHUB_USER}:${PARAM_GITHUB_TOKEN} \
+-u "${PARAM_GITHUB_USER}":"${PARAM_GITHUB_TOKEN}" \
 --header 'Content-Type: application/json' \
 --data-raw "${COMMENT}"
 
