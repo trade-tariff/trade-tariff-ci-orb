@@ -1,0 +1,11 @@
+description: >
+  A Terraform executor.
+docker:
+  - image: "hashicorp/terraform:<<parameters.terraform_version>>"
+parameters:
+  terraform_version:
+    default: latest
+    description: >
+      Pick a specific hashicorp/terraform image variant:
+      https://hub.docker.com/r/hashicorp/terraform/tags
+    type: string
