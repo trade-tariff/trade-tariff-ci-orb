@@ -21,8 +21,10 @@ if [ "${terraform_plan}" = "" ]; then
   exit 1
 fi
 
-pr_response=$(curl --location --request GET "https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls?head=$CIRCLE_PROJECT_USERNAME:$CIRCLE_BRANCH&state=open" \
--u "$param_github_user":"$param_github_token")
+pr_response=$(curl --silent \
+                  --location \
+                  --request GET "https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls?head=$CIRCLE_PROJECT_USERNAME:$CIRCLE_BRANCH&state=open" \
+                  -u "$param_github_user":"$param_github_token")
 
 if [ "$(echo "${pr_response}" | jq length)" -eq 0 ]; then
   echo "No PR found to update, skipping."
