@@ -11,10 +11,6 @@ parameters:
     default: GITHUB_USER
     description: "The environment variable that contains the GitHub username of the user that will perform GitHub API requests."
 
-executor:
-  docker:
-    - image: alpine:3.15
-
 steps:
   - hide-expired-comments:
       github_token: << parameters.github_token >>
