@@ -1,0 +1,20 @@
+description: >
+  Find (and hide) outdated comments from `comment-terraform-plan` jobs.
+
+parameters:
+  github_token:
+    type: env_var_name
+    default: GITHUB_TOKEN
+    description: "The environment variable that contains the GitHub token of the user that will perform GitHub API requests."
+  github_user:
+    type: env_var_name
+    default: GITHUB_USER
+    description: "The environment variable that contains the GitHub username of the user that will perform GitHub API requests."
+
+docker:
+  - image: alpine:3.17
+
+steps:
+  - hide-expired-comments:
+      github_token: << parameters.github_token >>
+      github_user: << parameters.github_user >>

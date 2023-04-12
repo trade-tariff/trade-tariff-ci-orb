@@ -1,9 +1,15 @@
 description: >
   Comment the output of Terraform Plan on an open PR.
+
 parameters:
   path:
     type: string
+    default: "./tfplan"
     description: "The path to the output of terraform plan."
+  terraform_version:
+    type: string
+    default: latest
+    description: "Terraform version you wish to use, from https://hub.docker.com/r/hashicorp/terraform/tags"
   github_token:
     type: env_var_name
     default: GITHUB_TOKEN
@@ -13,10 +19,11 @@ parameters:
     default: GITHUB_USER
     description: "The environment variable that contains the GitHub username of the user that will post the comment."
 
-executor: default
+executor:
+  name: terraform
+  terraform_version: << parameters.terraform_version >>
 
 steps:
   - comment-terraform-plan:
-      path: << parameters.path >>
       github_token: << parameters.github_token >>
       github_user: << parameters.github_user >>
