@@ -36,12 +36,14 @@ post_plan_comment() {
 
   message=$(jo body="$(printf "**Terraform plan output for $environment:**\n\`\`\`\n%s" "$plan_output")")
 
-  curl --silent --location --request POST "$pr_comment_url" \
-  -u "$GITHUB_USER":"$GITHUB_TOKEN" \
-  --header 'Content-Type: application/json' \
-  --header 'Accept: application/vnd.github+json' \
-  --data "$message"
-}
+  curl  --silent \
+        --location \
+        --request POST "$pr_comment_url" \
+        -u "$GITHUB_USER":"$GITHUB_TOKEN" \
+        --header 'Content-Type: application/json' \
+        --header 'Accept: application/vnd.github+json' \
+        --data "$message"
+  }
 
 plan_output=$(jo body="\`\`\`\n$(terraform show -no-color "${terraform_plan}")")
 pr_comment_url=$(echo "${pr_response}" | jq --raw-output ".[]._links.comments.href")

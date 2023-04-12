@@ -17,8 +17,11 @@ fetch_pr_number() {
   local pr_response
   local pr_number
 
-  pr_response=$(curl --silent --location --request GET "https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls?head=$CIRCLE_PROJECT_USERNAME:$CIRCLE_BRANCH&state=open" \
-        -u "$param_github_user":"$param_github_token")
+  pr_response=$(curl --silent \
+                    --location \
+                    --request GET "https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls?head=$CIRCLE_PROJECT_USERNAME:$CIRCLE_BRANCH&state=open" \
+                    -u "$param_github_user":"$param_github_token")
+
   pr_number=$(echo "$pr_response" | jq -r ".[0].number")
 
   echo "$pr_number"
@@ -37,11 +40,13 @@ fetch_comments() {
   local gql_response
 
   query=$(jo query="$(gql_query_for_comment)")
-  pr_response=$(curl --silent --location --request POST "https://api.github.com/graphql" \
-      -u "$param_github_user":"$param_github_token" \
-      --header 'Content-Type: application/json' \
-      --header 'Accept: application/vnd.github+json' \
-      --data "$(echo "$query" | jq -c .)")
+  pr_response=$(curl --silent \
+                    --location \
+                    --request POST "https://api.github.com/graphql" \
+                    -u "$param_github_user":"$param_github_token" \
+                    --header 'Content-Type: application/json' \
+                    --header 'Accept: application/vnd.github+json' \
+                    --data "$(echo "$query" | jq -c .)")
 
   echo "$gql_response" | jq -r ".data.repository.pullRequest.comments.nodes"
 }
@@ -109,11 +114,13 @@ mark_previous_comments_as_expired() {
 
     for node_id in $comment_ids; do
       query=$(jo query="$(gql_mutation_for_comment "$node_id")")
-      response=$(curl --silent --location --request POST "https://api.github.com/graphql" \
-        -u "$param_github_user":"$param_github_token" \
-        --header 'Content-Type: application/json' \
-        --header 'Accept: application/vnd.github+json' \
-        --data "$(echo "$query" | jq -c .)")
+      response=$(curl --silent \
+                      --location \
+                      --request POST "https://api.github.com/graphql" \
+                      -u "$param_github_user":"$param_github_token" \
+                      --header 'Content-Type: application/json' \
+                      --header 'Accept: application/vnd.github+json' \
+                      --data "$(echo "$query" | jq -c .)")
 
       echo "Response:"
       echo "$response"
