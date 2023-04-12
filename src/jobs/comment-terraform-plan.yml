@@ -2,6 +2,10 @@ description: >
   Comment the output of Terraform Plan on an open PR.
 
 parameters:
+  path:
+    type: string
+    default: "./tfplan"
+    description: "The path to the output of terraform plan."
   terraform_version:
     type: string
     default: latest

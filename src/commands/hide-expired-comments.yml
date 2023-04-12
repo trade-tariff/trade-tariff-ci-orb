@@ -12,15 +12,14 @@ parameters:
     description: "The environment variable that contains the GitHub username of the user that will perform GitHub API requests."
 
 steps:
-  steps:
-    - checkout
-    - run:
-        name: Install Dependencies
-        command: |
-          apk add --no-cache bash jq jo curl
-    - run:
-        name: Hide expired comments
-        environment:
-          GITHUB_TOKEN_ENV_VAR_NAME: << parameters.github_token >>
-          GITHUB_USER_ENV_VAR_NAME: << parameters.github_user >>
-        command: <<include(scripts/hide-expired-comments.sh)>>
+  - checkout
+  - run:
+      name: Install Dependencies
+      command: |
+        apk add --no-cache bash jq jo curl
+  - run:
+      name: Hide expired comments
+      environment:
+        GITHUB_TOKEN_ENV_VAR_NAME: << parameters.github_token >>
+        GITHUB_USER_ENV_VAR_NAME: << parameters.github_user >>
+      command: <<include(scripts/hide-expired-comments.sh)>>
