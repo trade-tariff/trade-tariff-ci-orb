@@ -25,5 +25,6 @@ executor:
 
 steps:
   - comment-terraform-plan:
+      path: << parameters.path >>
       github_token: << parameters.github_token >>
       github_user: << parameters.github_user >>
