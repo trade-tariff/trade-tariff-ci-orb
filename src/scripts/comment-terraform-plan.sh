@@ -4,7 +4,7 @@ environment=$1
 
 param_github_user=$(eval echo "\$$GITHUB_USER_ENV_VAR_NAME")
 param_github_token=$(eval echo "\$$GITHUB_TOKEN_ENV_VAR_NAME")
-terraform_plan=$(eval echo "\$$PARAM_PLAN")
+terraform_plan=${PARAM_PLAN}
 
 if [ "${param_github_token}" = "" ]; then
   echo "GITHUB_TOKEN not set."
