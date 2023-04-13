@@ -41,7 +41,7 @@ post_plan_comment() {
   curl  --silent \
         --location \
         --request POST "$pr_comment_url" \
-        -u "$GITHUB_USER":"$GITHUB_TOKEN" \
+        -u "$param_github_user":"$param_github_token" \
         --header 'Content-Type: application/json' \
         --header 'Accept: application/vnd.github+json' \
         --data "$message"
