@@ -6,9 +6,9 @@ parameters:
     description: Deployment environment to pass to Sentry
     type: string
   version:
-    description: Version of Sentry CLI to use. Defaults to 1.75.2
+    description: Version of Sentry CLI to use. Defaults to '2.19.4'
     type: string
-    default: "1.75.2"
+    default: "2.19.4"
 
 steps:
   - run:
@@ -26,5 +26,5 @@ steps:
         sentry-cli releases new -p $SENTRY_PROJECT $SENTRY_RELEASE &&
         sentry-cli releases set-commits $SENTRY_RELEASE --auto &&
         sentry-cli releases finalize $SENTRY_RELEASE &&
-        sentry-cli releases deploys $SENTRY_RELEASE new -e $SENTRY_ENVIRONMENT || /usr/bin/true
+        sentry-cli deploys $SENTRY_RELEASE new -e << parameters.environment >> || /usr/bin/true
         # piping into the coreutil true prevents a sentry outage from blocking deploys, see HOTT-1570
