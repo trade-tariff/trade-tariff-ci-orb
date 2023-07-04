@@ -1,0 +1,22 @@
+description: >
+  Healthcheck PaaS dark app
+
+parameters:
+  cf_app:
+    description: PaaS App name
+    type: string
+  space:
+    description: Environment name
+    type: string
+  environment_key:
+    description: Environment key, i.e. 'dev'
+    type: string
+
+steps:
+  - run:
+      name: Verify if dark app is working
+      environment:
+        PARAM_CF_APP: << parameters.cf_app >>
+        PARAM_SPACE: << parameters.space >>
+        PARAM_ENV_KEY: << parameters.environment_key >>
+      command: <<include(scripts/healthcheck.sh)

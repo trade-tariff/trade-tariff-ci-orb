@@ -74,9 +74,10 @@ steps:
       name: "Wait before health checking dark app"
       command: sleep 15
 
-  - run:
-      name: "Verify new version is working on dark URL."
-      command: <<include(scripts/healthcheck.sh)>> << parameters.cf_app >> << parameters.space >> << parameters.environment_key >>
+  - healthcheck:
+      cf_app: << parameters.cf_app >>
+      space: << parameters.space >>
+      environment_key: << parameters.environment_key >>
 
   - run:
       name: "Switch dark app to live"
