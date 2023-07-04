@@ -1,0 +1,97 @@
+description: >
+  Deploys new image to PaaS
+
+parameters:
+  docker_image:
+    description: Name of the docker image
+    type: string
+  docker_tag:
+    description: Tag of the docker image
+    type: string
+    default: latest
+  space:
+    description: Which environment you are deploying to
+    type: string
+  environment_key:
+    description: Environment key for app, e.g. dev
+    type: string
+  app_domain_prefix:
+    description: URL prefix for app, e.g. dev
+    type: string
+  cf_app:
+    description: Name of the app on PaaS
+    type: string
+  ecr_repo:
+    description: ECR Repository URL
+    type: string
+  aws_access_key_id:
+    description: AWS Access Key ID, for logging into ECR
+    type: string
+  aws_secret_access_key:
+    description: AWS Secret Access Key, for logging into ECR
+    type: string
+  cf_backend_app_xi:
+    description: PaaS backend app (XI) name
+    type: string
+  cf_backend_app_uk:
+    description: PaaS backend app (UK) name
+    type: string
+
+steps:
+  - run:
+      name: Fetch app's existing CF manifest
+      command: |
+        cf create-app-manifest "$CF_APP-<< parameters.environment_key >>" -p deploy_manifest.yml
+
+  - run:
+      name: "Push new app in dark mode"
+      command: |
+        CF_DOCKER_PASSWORD=<< aws_secret_access_key >>
+        cf push "<< parameters.cf_app >>-<< parameters.environment_key >>-dark" \
+          -f deploy_manifest.yml \
+          --no-route \
+          --docker-image "$ECR_REPO/$DOCKER_IMAGE:$DOCKER_TAG" \
+          --docker-username "<< aws_access_key_id >>"
+
+  - run:
+      name: "Map route to dark app"
+      command: |
+        app="<< parameters.cf_app >>-<< parameters.environment_key >>-dark"
+
+        cf map-route $app london.cloudapps.digital -n $app
+
+        cf add-network-policy $app \
+          "<< parameters.cf_backend_app_xi >>-<< parameters.environment_key >>" \
+          --protocol tcp \
+          --port 8080
+
+        cf add-network-policy $app \
+          "<< parameters.cf_backend_app_uk >>-<< parameters.environment_key >>" \
+          --protocol tcp \
+          --port 8080
+
+  - run:
+      name: "Wait before health checking dark app"
+      command: sleep 15
+
+  - run:
+      name: "Verify new version is working on dark URL."
+      command: <<include(scripts/healthcheck.sh)>> << parameters.cf_app >> << parameters.space >> << parameters.environment_key >>
+
+  - run:
+      name: "Switch dark app to live"
+      command: |
+        app_name="<< parameters.cf_app >>-<< parameters.environment_key >>"
+        dark_app="$app_name-dark"
+
+        cf unmap-route "$dark_app" london.cloudapps.digital -n "$dark_app"
+
+        cf map-route "$dark_app" london.cloudapps.digital -n "$app_name"
+        cf map-route "$dark_app" "<< parameters.app_domain_prefix >>.trade-tariff.service.gov.uk"
+
+        cf unmap-route  "$app_name" london.cloudapps.digital -n "$app_name"
+        cf unmap-route  "$app_name" "<< parameters.app_domain_prefix >>".trade-tariff.service.gov.uk
+
+        cf stop "$app_name"
+        cf delete "$app_name" -f
+        cf rename "$dark_app" "$app_name
