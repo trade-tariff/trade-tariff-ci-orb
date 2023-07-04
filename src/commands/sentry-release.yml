@@ -1,0 +1,30 @@
+description: >
+  Create release and notify Sentry of deploy
+
+parameters:
+  environment:
+    description: Deployment environment to pass to Sentry
+    type: string
+  version:
+    description: Version of Sentry CLI to use. Defaults to '2.19.4'
+    type: string
+    default: "2.19.4"
+
+steps:
+  - run:
+      name: Download Sentry
+      command: |
+        curl -sL \
+          -o /usr/local/bin/sentry-cli \
+          "https://github.com/getsentry/sentry-cli/releases/download/<< parameters.version >>/sentry-cli-Linux-x86_64"
+        chmod 0755 /usr/local/bin/sentry-cli
+
+  - run:
+      name: Create release
+      command: |
+        SENTRY_RELEASE=$(sentry-cli releases propose-version)
+        sentry-cli releases new -p $SENTRY_PROJECT $SENTRY_RELEASE &&
+        sentry-cli releases set-commits $SENTRY_RELEASE --auto &&
+        sentry-cli releases finalize $SENTRY_RELEASE &&
+        sentry-cli deploys $SENTRY_RELEASE new -e << parameters.environment >> || /usr/bin/true
+        # piping into the coreutil true prevents a sentry outage from blocking deploys, see HOTT-1570
