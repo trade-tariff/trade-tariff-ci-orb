@@ -22,7 +22,7 @@ steps:
   - run:
       name: Create release
       command: |
-        SENTRY_RELEASE=$(sentry-cli releases propose-version)    
+        SENTRY_RELEASE=$(sentry-cli releases propose-version)
         sentry-cli releases new -p $SENTRY_PROJECT $SENTRY_RELEASE &&
         sentry-cli releases set-commits $SENTRY_RELEASE --auto &&
         sentry-cli releases finalize $SENTRY_RELEASE &&
