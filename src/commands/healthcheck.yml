@@ -11,6 +11,10 @@ parameters:
   environment_key:
     description: Environment key, i.e. 'dev'
     type: string
+  healthcheck_path:
+    description: The route to issue a GET request to when polling new app health. Defaults to 'healthcheck'.
+    type: string
+    default: healthcheck
 
 steps:
   - run:
@@ -19,4 +23,5 @@ steps:
         PARAM_CF_APP: << parameters.cf_app >>
         PARAM_SPACE: << parameters.space >>
         PARAM_ENV_KEY: << parameters.environment_key >>
+        HEALTHCHECK_PATH: << parameters.healthcheck_path >>
       command: <<include(scripts/healthcheck.sh)>>
