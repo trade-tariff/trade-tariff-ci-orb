@@ -46,12 +46,12 @@ steps:
   - run:
       name: "Push new app in dark mode"
       command: |
-        CF_DOCKER_PASSWORD=<< aws_secret_access_key >>
+        CF_DOCKER_PASSWORD=<< parameters.aws_secret_access_key >>
         cf push "<< parameters.cf_app >>-<< parameters.environment_key >>-dark" \
           -f deploy_manifest.yml \
           --no-route \
           --docker-image "$ECR_REPO/$DOCKER_IMAGE:$DOCKER_TAG" \
-          --docker-username "<< aws_access_key_id >>"
+          --docker-username "<< parameters.aws_access_key_id >>"
 
   - run:
       name: "Map route to dark app"

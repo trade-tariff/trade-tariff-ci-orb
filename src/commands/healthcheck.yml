@@ -19,4 +19,4 @@ steps:
         PARAM_CF_APP: << parameters.cf_app >>
         PARAM_SPACE: << parameters.space >>
         PARAM_ENV_KEY: << parameters.environment_key >>
-      command: <<include(scripts/healthcheck.sh)
+      command: <<include(scripts/healthcheck.sh)>>
