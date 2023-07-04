@@ -36,6 +36,10 @@ parameters:
   cf_backend_app_uk:
     description: PaaS backend app (UK) name
     type: string
+  sleep:
+    description: Whether there should be sleeps to drain the app. Defaults to '', that is, no sleep.
+    type: string
+    default: ""
 
 steps:
   - run:
@@ -93,6 +97,16 @@ steps:
         cf unmap-route  "$app_name" london.cloudapps.digital -n "$app_name"
         cf unmap-route  "$app_name" "<< parameters.app_domain_prefix >>".trade-tariff.service.gov.uk
 
-        cf stop "$app_name"
+  - run:
+      name: "Sleep (if required) then delete old app"
+      command: |
+        if [ -n << parameters.sleep >>]; then
+          sleep 30
+          cf stop "$app_name"
+          sleep 10
+        else
+          cf stop "$app_name"
+        fi
+
         cf delete "$app_name" -f
         cf rename "$dark_app" "$app_name
