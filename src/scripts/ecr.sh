@@ -4,10 +4,10 @@ docker_tag=$(git rev-parse --short HEAD)
 container="${IMAGE_NAME}-${ENVIRONMENT}:${docker_tag}"
 
 function fetch_ecr_url {
-  json=$(aws ssm get-parameter              \
-  --name "/${ENVIRONMENT}/${SSM_PARAMETER}" \
-  --with-decryption                         \
-  --output json                             \
+  json=$(aws ssm get-parameter \
+  --name "${SSM_PARAMETER}"    \
+  --with-decryption            \
+  --output json                \
   --color off)
 
   output=$(jq -r .Parameter.Value <<< "${json}")
