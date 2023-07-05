@@ -1,7 +1,10 @@
 description: >
   Run smoketests
 
-executor: cypress
+executor:
+  cypress:
+    parameters:
+      cypress_tag: << parameters.cypress_tag >>
 
 parameters:
   cypress_tag:
@@ -19,6 +22,5 @@ parameters:
 
 steps:
   - smoketests:
-      cypress_tag: << parameters.cypress_tag >>
       url: << parameters.url >>
       space: << parameters.space >>
