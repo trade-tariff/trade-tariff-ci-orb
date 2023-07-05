@@ -8,6 +8,9 @@ parameters:
   space:
     description: Environment to run tests on
     type: string
+  yarn_run:
+    description: Name of package script to pass to yarn
+    type: string
 
 steps:
   - run:
@@ -25,7 +28,7 @@ steps:
         - trade-tariff-testing/node_modules
         - /root/.cache/Cypress
   - run:
-      name: "Cypress Smoke tests"
+      name: "Run Cypress smoketests"
       command: |
         cd trade-tariff-testing
-        yarn run << parameters.space >>-tariff-backend-smoketests
+        yarn run << parameters.yarn_run >>
