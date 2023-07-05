@@ -1,0 +1,24 @@
+description: >
+  Run smoketests
+
+executor: cypress
+
+parameters:
+  cypress_tag:
+    type: string
+    default: latest
+    description: cypress docker tag to use
+
+  url:
+    type: string
+    description: URL to run smoketests against
+
+  space:
+    type: string
+    description: Environment to run tests on
+
+steps:
+  - smoketests:
+      cypress_tag: << parameters.cypress_tag >>
+      url: << parameters.url >>
+      space: << parameters.space >>
