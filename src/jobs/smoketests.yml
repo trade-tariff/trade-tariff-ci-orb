@@ -2,9 +2,8 @@ description: >
   Run smoketests
 
 executor:
-  cypress:
-    parameters:
-      cypress_tag: << parameters.cypress_tag >>
+  name: cypress
+  cypress_tag: << parameters.cypress_tag >>
 
 parameters:
   cypress_tag:
