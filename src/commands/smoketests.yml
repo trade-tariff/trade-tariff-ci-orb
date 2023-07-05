@@ -5,9 +5,7 @@ parameters:
   url:
     description: URL to run smoketests against
     type: string
-  space:
-    description: Environment to run tests on
-    type: string
+
   yarn_run:
     description: Name of package script to pass to yarn
     type: string

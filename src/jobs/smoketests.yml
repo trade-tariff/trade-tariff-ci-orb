@@ -10,6 +10,7 @@ parameters:
     type: string
     default: latest
     description: cypress docker tag to use
+
   yarn_run:
     description: Name of package script to pass to yarn
     type: string
@@ -18,12 +19,7 @@ parameters:
     type: string
     description: URL to run smoketests against
 
-  space:
-    type: string
-    description: Environment to run tests on
-
 steps:
   - smoketests:
       url: << parameters.url >>
-      space: << parameters.space >>
       yarn_run: << parameters.yarn_run >>
