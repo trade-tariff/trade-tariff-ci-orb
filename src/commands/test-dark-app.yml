@@ -1,0 +1,28 @@
+description: >
+  Healthchecks dark app on PaaS
+
+parameters:
+  space:
+    description: Which environment you are deploying to
+    type: string
+  environment_key:
+    description: Environment key for app, e.g. dev
+    type: string
+  cf_app:
+    description: Name of the app on PaaS
+    type: string
+  healthcheck_path:
+    description: The route to issue a GET request to when polling new app health. Defaults to 'healthcheck'.
+    type: string
+    default: healthcheck
+
+steps:
+  - run:
+      name: "Wait before health checking dark app"
+      command: sleep 15
+
+  - healthcheck:
+      cf_app: << parameters.cf_app >>
+      space: << parameters.space >>
+      environment_key: << parameters.environment_key >>
+      healthcheck_path: << parameters.healthcheck_path >>
