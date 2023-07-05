@@ -28,7 +28,16 @@ parameters:
     description: AWS Region
 
 steps:
+  - checkout
+
+  - setup_remote_docker:
+      version: 20.10.11
+      docker_layer_caching: false
+
+  - aws-cli/install
+
   - build-and-push:
       ssm_parameter: << parameters.ssm_parameter >>
       image_name: << parameters.image_name >>
       aws_default_region: << parameters.aws_default_region >>
+      environment: << parameters.environment >>

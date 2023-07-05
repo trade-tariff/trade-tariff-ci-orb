@@ -19,18 +19,11 @@ parameters:
     description: AWS Region
 
 steps:
-  - checkout
-
-  - setup_remote_docker:
-      version: 20.10.11
-      docker_layer_caching: false
-
-  - aws-cli/install
-
   - run:
       environment:
         SSM_PARAMETER: << parameters.ssm_parameter >>
         IMAGE_NAME: << parameters.image_name >>
         AWS_DEFAULT_REGION: << parameters.aws_default_region >>
+        ENVIRONMENT: << parameters.environment >>
       name: Build and push to ECR
       command: <<include(scripts/ecr.sh)>>
