@@ -1,0 +1,13 @@
+description: >
+  Cypress executor for smoketests
+
+docker:
+  - image: "cypress/base:<< parameters.cypress_tag >>"
+
+parameters:
+  cypress_tag:
+    description: >
+      Pick a specific cypress/base tag
+      https://hub.docker.com/r/cypress/base/tags
+    default: latest
+    type: string

@@ -1,0 +1,32 @@
+description: >
+  Run smoketests
+
+parameters:
+  url:
+    description: URL to run smoketests against
+    type: string
+
+  yarn_run:
+    description: Name of package script to pass to yarn
+    type: string
+
+steps:
+  - run:
+      name: "Checkout tests repo"
+      command: git clone --depth=1 "https://github.com/trade-tariff/trade-tariff-testing/"
+  - restore_cache:
+      keys:
+        - v2-smoketest-deps-{{ checksum "trade-tariff-testing/yarn.lock" }}
+  - run:
+      name: "Install NPM packages"
+      command: "cd trade-tariff-testing && yarn install"
+  - save_cache:
+      key: v2-smoketest-deps-{{ checksum "trade-tariff-testing/yarn.lock" }}
+      paths:
+        - trade-tariff-testing/node_modules
+        - /root/.cache/Cypress
+  - run:
+      name: "Run Cypress smoketests"
+      command: |
+        cd trade-tariff-testing
+        yarn run << parameters.yarn_run >>

@@ -1,0 +1,25 @@
+description: >
+  Run smoketests
+
+executor:
+  name: cypress
+  cypress_tag: << parameters.cypress_tag >>
+
+parameters:
+  cypress_tag:
+    type: string
+    default: latest
+    description: cypress docker tag to use
+
+  yarn_run:
+    description: Name of package script to pass to yarn
+    type: string
+
+  url:
+    type: string
+    description: URL to run smoketests against
+
+steps:
+  - smoketests:
+      url: << parameters.url >>
+      yarn_run: << parameters.yarn_run >>
