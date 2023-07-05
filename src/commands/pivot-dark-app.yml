@@ -14,10 +14,10 @@ parameters:
   cf_app:
     description: Name of the app on PaaS
     type: string
-  sleep:
-    description: Whether there should be sleeps to drain the app. Defaults to '', that is, no sleep.
-    type: string
-    default: ""
+  drain_time:
+    description: Number of seconds to sleep to drain the app. Defaults to 0.
+    type: integer
+    default: 0
 
 steps:
   - run:
@@ -37,13 +37,9 @@ steps:
   - run:
       name: "Sleep (if required) then delete old app"
       command: |
-        if [ -n << parameters.sleep >> ]; then
-          sleep 30
-          cf stop "$app_name"
-          sleep 10
-        else
-          cf stop "$app_name"
-        fi
+        sleep << parameters.drain_time >>
+        cf stop "$app_name"
+        sleep 10
 
         cf delete "$app_name" -f
         cf rename "$dark_app" "$app_name
