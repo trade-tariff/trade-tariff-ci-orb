@@ -1,0 +1,45 @@
+description: >
+  Deploy dark app to PaaS
+
+parameters:
+  docker_image:
+    description: Name of the docker image
+    type: string
+  docker_tag:
+    description: Tag of the docker image
+    type: string
+    default: latest
+  space:
+    description: Which environment you are deploying to
+    type: string
+  environment_key:
+    description: Environment key for app, e.g. dev
+    type: string
+  cf_app:
+    description: Name of the app on PaaS
+    type: string
+  ecr_repo:
+    description: ECR Repository URL
+    type: string
+  aws_access_key_id:
+    description: AWS Access Key ID, for logging into ECR
+    type: string
+  aws_secret_access_key:
+    description: AWS Secret Access Key, for logging into ECR
+    type: string
+
+steps:
+  - run:
+      name: Fetch app's existing CF manifest
+      command: |
+        cf create-app-manifest "$CF_APP-<< parameters.environment_key >>" -p deploy_manifest.yml
+
+  - run:
+      name: Push new app in dark mode
+      command: |
+        export CF_DOCKER_PASSWORD=<< parameters.aws_secret_access_key >>
+        cf push "<< parameters.cf_app >>-<< parameters.environment_key >>-dark" \
+          -f deploy_manifest.yml \
+          --no-route \
+          --docker-image "<<  parameters.ecr_repo >>/<< parameters.docker_image >>:<< parameters.docker_tag >>" \
+          --docker-username "<< parameters.aws_access_key_id >>"

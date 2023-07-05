@@ -1,0 +1,45 @@
+description: >
+  Pivot dark app to live on PaaS
+
+parameters:
+  space:
+    description: Which environment you are deploying to
+    type: string
+  environment_key:
+    description: Environment key for app, e.g. dev
+    type: string
+  app_domain_prefix:
+    description: URL prefix for app, e.g. dev
+    type: string
+  cf_app:
+    description: Name of the app on PaaS
+    type: string
+  drain_time:
+    description: Number of seconds to sleep to drain the app. Defaults to 0.
+    type: integer
+    default: 0
+
+steps:
+  - run:
+      name: "Switch dark app to live"
+      command: |
+        app_name="<< parameters.cf_app >>-<< parameters.environment_key >>"
+        dark_app="$app_name-dark"
+
+        cf unmap-route "$dark_app" london.cloudapps.digital -n "$dark_app"
+
+        cf map-route "$dark_app" london.cloudapps.digital -n "$app_name"
+        cf map-route "$dark_app" "<< parameters.app_domain_prefix >>.trade-tariff.service.gov.uk"
+
+        cf unmap-route  "$app_name" london.cloudapps.digital -n "$app_name"
+        cf unmap-route  "$app_name" "<< parameters.app_domain_prefix >>".trade-tariff.service.gov.uk
+
+  - run:
+      name: "Sleep (if required) then delete old app"
+      command: |
+        sleep << parameters.drain_time >>
+        cf stop "$app_name"
+        sleep 10
+
+        cf delete "$app_name" -f
+        cf rename "$dark_app" "$app_name
