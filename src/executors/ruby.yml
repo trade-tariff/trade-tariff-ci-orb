@@ -1,0 +1,15 @@
+description: >
+  Ruby executor for building docker images
+
+docker:
+  - image: 'cimg/ruby:<< parameters.tag >>'
+
+parameters:
+  tag:
+    default: "3.2.2-node"
+    description: >
+      Pick a specific circleci/ruby image variant:
+      https://hub.docker.com/r/cimg/ruby/tags
+
+      Defaults to `3.2.2-node`.
+    type: string

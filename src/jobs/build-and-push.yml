@@ -1,0 +1,43 @@
+description: >
+  Build and push image to AWS ECR
+
+executor:
+  name: ruby
+  tag: << parameters.ruby_tag >>
+
+parameters:
+  ruby_tag:
+    type: string
+    default: "3.2.2-node"
+    description: cimg/ruby tag to use
+
+  ssm_parameter:
+    type: string
+    description: SSM Parameter that contains the ECR URL
+
+  environment:
+    type: string
+    description: Deployment environment, e.g. 'development'
+
+  image_name:
+    type: string
+    description: Name of the Docker image to build
+
+  aws_default_region:
+    type: string
+    description: AWS Region
+
+steps:
+  - checkout
+
+  - setup_remote_docker:
+      version: 20.10.11
+      docker_layer_caching: false
+
+  - aws-cli/install
+
+  - build-and-push:
+      ssm_parameter: << parameters.ssm_parameter >>
+      image_name: << parameters.image_name >>
+      aws_default_region: << parameters.aws_default_region >>
+      environment: << parameters.environment >>
