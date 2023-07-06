@@ -24,7 +24,6 @@ ecr_url=$(fetch_ecr_url)
 docker build -t "$container" .
 docker tag "${container}" "${ecr_url}:${docker_tag}"
 
-aws ecr get-login-password --region "${AWS_DEFAULT_REGION}" |
-  docker login --username AWS --password-stdin "${ecr_url}"
+aws ecr get-login-password | docker login --username AWS --password-stdin "${ecr_url}"
 
 docker push "${ecr_url}:${docker_tag}"

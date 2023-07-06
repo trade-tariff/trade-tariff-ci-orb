@@ -23,10 +23,6 @@ parameters:
     type: string
     description: Name of the Docker image to build
 
-  aws_default_region:
-    type: string
-    description: AWS Region
-
 steps:
   - checkout
 
@@ -39,5 +35,4 @@ steps:
   - build-and-push:
       ssm_parameter: << parameters.ssm_parameter >>
       image_name: << parameters.image_name >>
-      aws_default_region: << parameters.aws_default_region >>
       environment: << parameters.environment >>

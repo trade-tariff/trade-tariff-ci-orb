@@ -14,16 +14,11 @@ parameters:
     type: string
     description: Name of the Docker image to build
 
-  aws_default_region:
-    type: string
-    description: AWS Region
-
 steps:
   - run:
       environment:
         SSM_PARAMETER: << parameters.ssm_parameter >>
         IMAGE_NAME: << parameters.image_name >>
-        AWS_DEFAULT_REGION: << parameters.aws_default_region >>
         ENVIRONMENT: << parameters.environment >>
       name: Build and push to ECR
       command: <<include(scripts/ecr.sh)>>
