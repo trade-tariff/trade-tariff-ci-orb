@@ -1,7 +1,6 @@
 #!/bin/bash
 
 cf_app=$(eval echo "\$$PARAM_CF_APP")
-space=$(eval echo "\$$PARAM_SPACE")
 env_key=$(eval echo "\$$PARAM_ENV_KEY")
 path=$(eval echo "\$$HEALTHCHECK_PATH")
 
@@ -9,11 +8,6 @@ dark_app="$cf_app-$env_key-dark"
 
 if [ "${cf_app}" = "" ]; then
   echo "cf_app parameter not set."
-  exit 1
-fi
-
-if [ "${space}" = "" ]; then
-  echo "space parameter not set."
   exit 1
 fi
 
