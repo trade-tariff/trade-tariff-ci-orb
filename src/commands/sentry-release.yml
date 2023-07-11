@@ -14,11 +14,7 @@ steps:
   - run:
       name: Download Sentry
       command: |
-        curl -sL \
-          -o /usr/local/bin/sentry-cli \
-          "https://github.com/getsentry/sentry-cli/releases/download/<< parameters.version >>/sentry-cli-Linux-x86_64"
-        chmod 0755 /usr/local/bin/sentry-cli
-
+        curl -sL https://sentry.io/get-cli/ | SENTRY_CLI_VERSION=<< parameters.version >> bash
   - run:
       name: Create release
       command: |
