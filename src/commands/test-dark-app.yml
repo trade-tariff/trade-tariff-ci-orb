@@ -2,9 +2,6 @@ description: >
   Healthchecks dark app on PaaS
 
 parameters:
-  space:
-    description: Which environment you are deploying to
-    type: string
   environment_key:
     description: Environment key for app, e.g. dev
     type: string
@@ -23,6 +20,5 @@ steps:
 
   - healthcheck:
       cf_app: << parameters.cf_app >>
-      space: << parameters.space >>
       environment_key: << parameters.environment_key >>
       healthcheck_path: << parameters.healthcheck_path >>
