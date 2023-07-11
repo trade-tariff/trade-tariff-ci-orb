@@ -13,7 +13,14 @@ parameters:
 steps:
   - run:
       name: "Checkout tests repo"
-      command: git clone --depth=1 "https://github.com/trade-tariff/trade-tariff-testing.git"
+      command: |
+        apt-get update && apt-get install \
+          -y --no-install-recommends \
+          ca-certificates \
+          openssl
+
+        git clone --depth=1 "https://github.com/trade-tariff/trade-tariff-testing.git"
+
   - restore_cache:
       keys:
         - v2-smoketest-deps-{{ checksum "trade-tariff-testing/yarn.lock" }}
