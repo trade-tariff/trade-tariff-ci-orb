@@ -38,6 +38,7 @@ steps:
       name: "Sleep (if required) then delete old app"
       command: |
         app_name="<< parameters.cf_app >>-<< parameters.environment_key >>"
+        dark_app="$app_name-dark"
 
         sleep << parameters.drain_time >>
         cf stop "$app_name"
