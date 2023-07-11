@@ -21,7 +21,7 @@ function fetch_ecr_url {
 
 ecr_url=$(fetch_ecr_url)
 
-echo $(git rev-parse --short HEAD) > REVISION
+git rev-parse --short HEAD > REVISION
 
 docker build -t "$container" .
 docker tag "${container}" "${ecr_url}:${docker_tag}"
