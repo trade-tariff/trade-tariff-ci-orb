@@ -44,4 +44,4 @@ steps:
         sleep 10
 
         cf delete "$app_name" -f
-        cf rename "$dark_app" "$app_name
+        cf rename "$dark_app" "$app_name"
