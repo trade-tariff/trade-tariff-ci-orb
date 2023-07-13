@@ -27,6 +27,7 @@ steps:
         dark_app="$app_name-dark"
 
         cf unmap-route "$dark_app" london.cloudapps.digital -n "$dark_app"
+        cf delete-route london.cloudapps.digital --hostname "$dark_app" -f
 
         cf map-route "$dark_app" london.cloudapps.digital -n "$app_name"
         cf map-route "$dark_app" "<< parameters.app_domain_prefix >>.trade-tariff.service.gov.uk"
