@@ -22,13 +22,18 @@ steps:
       command: |
         echo "Checking release release-${RELEASE_NAME}"
         gh release view << parameters.release-tag >> --json 'body' -q '.body' > release-notes.txt
+        echo "Release contains"
+        cat release-notes.txt
   - run:
       name: Clean up notes
       command: |
+        echo "Escape release notes for slack orb"
         sed -i 's/\\"//g' release-notes.txt
         sed -i "s/\\'//g" release-notes.txt
         sed -i 's/"//g' release-notes.txt
         sed -i "s/'//g" release-notes.txt
+        sed -i 's/\n/\\n/g' release-notes.txt
+        sed -i 's/\t/\\t/g' release-notes.txt
         echo 'export RELEASE_NOTES="$(< release-notes.txt)"' >> $BASH_ENV
   - run:
       name: Display release notes
