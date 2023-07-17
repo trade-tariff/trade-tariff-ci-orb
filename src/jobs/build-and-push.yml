@@ -2,7 +2,7 @@ description: >
   Build and push image to AWS ECR
 
 executor:
-  image: << parameters.image >>
+  name: << parameters.image >>
   tag: << parameters.tag >>
 
 parameters:
@@ -13,6 +13,7 @@ parameters:
 
   tag:
     type: string
+    default: default
     description: "Tag for executor image to use. Defaults to executor default."
 
   ssm_parameter:
