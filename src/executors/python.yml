@@ -1,0 +1,15 @@
+description: >
+  Python executor for building docker images
+
+docker:
+  - image: 'cimg/python:<< parameters.tag >>'
+
+parameters:
+  tag:
+    default: "3.11.2"
+    description: >
+      Pick a specific circleci/python image variant:
+      https://hub.docker.com/r/cimg/python/tags
+
+      Defaults to `3.11.2`.
+    type: string

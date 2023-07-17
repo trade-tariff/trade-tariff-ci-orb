@@ -2,14 +2,18 @@ description: >
   Build and push image to AWS ECR
 
 executor:
-  name: ruby
-  tag: << parameters.ruby_tag >>
+  name: << parameters.executor >>
+  tag: << parameters.tag >>
 
 parameters:
-  ruby_tag:
+  executor:
     type: string
-    default: "3.2.2-node"
-    description: cimg/ruby tag to use
+    default: "ruby"
+    description: "Executor to use. Defaults to 'ruby'."
+
+  tag:
+    type: string
+    description: "Tag for executor image to use. Defaults to executor default."
 
   ssm_parameter:
     type: string
