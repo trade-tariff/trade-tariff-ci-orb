@@ -2,11 +2,11 @@ description: >
   Build and push image to AWS ECR
 
 executor:
-  name: << parameters.executor >>
+  image: << parameters.image >>
   tag: << parameters.tag >>
 
 parameters:
-  executor:
+  image:
     type: string
     default: "ruby"
     description: "Executor to use. Defaults to 'ruby'."
