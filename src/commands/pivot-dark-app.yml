@@ -18,6 +18,10 @@ parameters:
     description: Number of seconds to sleep to drain the app. Defaults to 0.
     type: integer
     default: 0
+  domain:
+    description: The domain where the app is going to be reachable
+    type: string
+    default: london.cloudapps.digital
 
 steps:
   - run:
@@ -26,11 +30,11 @@ steps:
         app_name="<< parameters.cf_app >>-<< parameters.environment_key >>"
         dark_app="$app_name-dark"
 
-        cf unmap-route "$dark_app" london.cloudapps.digital -n "$dark_app"
-        cf delete-route london.cloudapps.digital --hostname "$dark_app" -f
+        cf unmap-route "$dark_app" << parameters.domain >> --hostname "$dark_app"
+        cf delete-route << parameters.domain >> --hostname "$dark_app" -f
 
-        cf map-route "$dark_app" london.cloudapps.digital -n "$app_name"
-        cf unmap-route  "$app_name" london.cloudapps.digital -n "$app_name"
+        cf map-route "$dark_app" << parameters.domain >> --hostname "$app_name"
+        cf unmap-route  "$app_name" << parameters.domain >> --hostname "$app_name"
 
   - run:
       name: "Sleep (if required) then delete old app"
