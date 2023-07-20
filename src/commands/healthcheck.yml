@@ -12,6 +12,10 @@ parameters:
     description: The route to issue a GET request to when polling new app health. Defaults to 'healthcheck'.
     type: string
     default: healthcheck
+  domain:
+    description: The domain where the app is going to be reachable
+    type: string
+    default: london.cloudapps.digital
 
 steps:
   - run:
@@ -20,4 +24,5 @@ steps:
         PARAM_CF_APP: << parameters.cf_app >>
         PARAM_ENV_KEY: << parameters.environment_key >>
         HEALTHCHECK_PATH: << parameters.healthcheck_path >>
+        DOMAIN: << parameters.domain >>
       command: <<include(scripts/healthcheck.sh)>>
