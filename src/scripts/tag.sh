@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 docker_tag=$(git rev-parse --short HEAD)
 RELEASE_VERSION=$(< "$RELEASE_FILE")
 
