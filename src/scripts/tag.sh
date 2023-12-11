@@ -1,6 +1,7 @@
 #!/bin/bash
 
 docker_tag=$(git rev-parse --short HEAD)
+RELEASE_VERSION=$(< "$RELEASE_FILE")
 
 if [ -z "${ECR_REPO}" ]; then
   echo "Missing ECR_REPO"
@@ -12,7 +13,6 @@ if [ -z "${RELEASE_VERSION}" ]; then
   exit 1
 fi
 
-RELEASE_VERSION=$(< RELEASE_FILE)
 echo "RELEASE_VERSION is '${RELEASE_VERSION}'"
 
 DOCKER_IMAGE="${ECR_REPO}/<< parameters.image-name >>"
