@@ -1,9 +1,12 @@
 #!/bin/bash
 
-set -x
-
 docker_tag=$(git rev-parse --short HEAD)
 RELEASE_VERSION=$(< "$RELEASE_FILE")
+
+if [ -z "${IMAGE_NAME}" ]; then
+  echo "Missing IMAGE_NAME"
+  exit 1
+fi
 
 if [ -z "${ECR_REPO}" ]; then
   echo "Missing ECR_REPO"
@@ -17,7 +20,7 @@ fi
 
 echo "RELEASE_VERSION is '${RELEASE_VERSION}'"
 
-DOCKER_IMAGE="${ECR_REPO}/<< parameters.image-name >>"
+DOCKER_IMAGE="${ECR_REPO}/${IMAGE_NAME}"
 IMAGE_TAG="release-${RELEASE_VERSION}"
 
 aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin "$ECR_REPO"

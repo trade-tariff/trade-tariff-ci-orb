@@ -17,4 +17,5 @@ steps:
       name: Tag Docker Image as production release
       environment:
         RELEASE_FILE: << parameters.release-version-file >>
+        IMAGE_NAME: << parameters.image-name>>
       command: <<include(scripts/tag.sh)>>
