@@ -6,10 +6,10 @@ docker:
 
 parameters:
   tag:
-    default: "3.3.0-node"
+    default: "3.2.2-node"
     description: >
       Pick a specific circleci/ruby image variant:
       https://hub.docker.com/r/cimg/ruby/tags
 
-      Defaults to `3.3.0-node`.
+      Defaults to `3.2.2-node`.
     type: string
