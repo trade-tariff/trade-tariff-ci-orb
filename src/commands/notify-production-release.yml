@@ -10,21 +10,17 @@ parameters:
     type: string
 
 steps:
+  - gh/setup
   - run:
       name: Read release name
       command: |
-        RELEASE_NAME=$(echo "<< parameters.release-tag >>" | sed 's/^release-//')
-        echo "export RELEASE_NAME='${RELEASE_NAME}'" >> $BASH_ENV
-        echo "Found release ${RELEASE_NAME}"
-  - run:
-      name: Fetch release notes
-      command: |
-        echo "Checking release release-${RELEASE_NAME}"
-        gh release view "${RELEASE_NAME}" --json body | jq .body -r > release-notes.txt
+        RELEASE_NAME="<< parameters.release-tag >>"
+        gh release view "${RELEASE_NAME}" --json body | jq .body > release-notes.txt
         echo 'export RELEASE_NOTES="$(< release-notes.txt)"' >> $BASH_ENV
   - run:
       name: Display release notes
-      command: echo ${RELEASE_NOTES}
+      command: |
+        gh release view "${RELEASE_NAME}"
   - slack/notify:
       channel: << parameters.slack-channel >>
       event: pass
@@ -35,7 +31,7 @@ steps:
               "type": "header",
               "text": {
                 "type": "plain_text",
-                "text": "New release ${RELEASE_NAME} for << parameters.app-name >> :tada:",
+                "text": "New release for << parameters.app-name >> :tada:",
                 "emoji": true
               }
             },
@@ -43,8 +39,17 @@ steps:
               "type": "section",
               "text": {
                 "type": "mrkdwn",
-                "text": "${RELEASE_NOTES}"
+                "text": ${RELEASE_NOTES}
               }
+            },
+            {
+              "type": "context",
+        			"elements": [
+                {
+                  "type": "mrkdwn",
+                  "text": "*<< parameters.release-tag >>*"
+                }
+              ]
             }
           ]
         }

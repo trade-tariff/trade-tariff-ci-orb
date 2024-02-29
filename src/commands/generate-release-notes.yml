@@ -10,7 +10,6 @@ parameters:
     default: release-details/notes.txt
 
 steps:
-  - gh/setup
   - run:
       name: Generate release notes
       command: |
