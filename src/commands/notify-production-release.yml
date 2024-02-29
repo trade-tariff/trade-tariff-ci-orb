@@ -20,17 +20,7 @@ steps:
       name: Fetch release notes
       command: |
         echo "Checking release release-${RELEASE_NAME}"
-        REPO_API_URL=$(echo "${CIRCLE_REPOSITORY_URL}/" | sed 's|.git/$||' | sed 's|git@github.com:|https://api.github.com/repos/|')
-        curl --retry 3 --silent --show-error "${REPO_API_URL}/releases/tags/<< parameters.release-tag >>" | jq -ar .body > release-notes.txt
-  - run:
-      name: Clean up notes
-      command: |
-        sed -i 's/\\"//g' release-notes.txt
-        sed -i "s/\\'//g" release-notes.txt
-        sed -i 's/"//g' release-notes.txt
-        sed -i "s/'//g" release-notes.txt
-        sed -i 's/\n/\\n/g' release-notes.txt
-        sed -i 's/\t/\\t/g' release-notes.txt
+        gh release view "${RELEASE_NAME}" --json body | jq .body -r > release-notes.txt
         echo 'export RELEASE_NOTES="$(< release-notes.txt)"' >> $BASH_ENV
   - run:
       name: Display release notes
