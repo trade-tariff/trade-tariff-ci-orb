@@ -15,12 +15,8 @@ steps:
       name: Read release name
       command: |
         RELEASE_NAME="<< parameters.release-tag >>"
-        gh release view "${RELEASE_NAME}" -R trade-tariff/${CIRCLE_PROJECT_REPONAME} --json body | jq .body > release-notes.txt
-        echo 'export RELEASE_NOTES="$(< release-notes.txt)"' >> $BASH_ENV
-  - run:
-      name: Display release notes
-      command: |
-        gh release view "${RELEASE_NAME}" -R trade-tariff/${CIRCLE_PROJECT_REPONAME}
+        gh release view "${RELEASE}" -R trade-tariff/${CIRCLE_PROJECT_REPONAME} --json name | jq .name > release-name
+        echo 'export RELEASE="$(cat release-name)"' >> $BASH_ENV
   - slack/notify:
       channel: << parameters.slack-channel >>
       event: pass
@@ -39,7 +35,7 @@ steps:
               "type": "section",
               "text": {
                 "type": "mrkdwn",
-                "text": "${RELEASE_NOTES}"
+                "text": "[View on GitHub](https://github.com/trade-tariff/${CIRCLE_PROJECT_REPONAME}/releases/tag/${RELEASE})"
               }
             },
             {
