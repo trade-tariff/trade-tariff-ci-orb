@@ -10,7 +10,7 @@ parameters:
 
 steps:
   - setup_remote_docker:
-      version: 20.10.11
+      version: default
       docker_layer_caching: false
   - aws-cli/install
   - run:
