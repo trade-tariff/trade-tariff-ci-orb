@@ -1,0 +1,21 @@
+description: >
+  Install Terraform
+
+parameters:
+  terraform_version:
+    type: string
+    default: 1.8.2
+    description: "The version of Terraform to install."
+  terraform_root:
+    type: string
+    default: "terraform"
+    description: "The directory to initialise the terraform backend. Typically ./terraform when using ECS based applications."
+
+steps:
+  - checkout
+  - run:
+      name: Install Terraform
+      environment:
+        TERRAFORM_VERSION: <<parameters.terraform_version>>
+        TERRAFORM_ROOT: <<parameters.terraform_root>>
+      command: <<include(scripts/install-terraform.sh)>>
