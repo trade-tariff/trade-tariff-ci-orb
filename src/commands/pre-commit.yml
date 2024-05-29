@@ -28,24 +28,25 @@ parameters:
 
 steps:
   - checkout
-  - when: << parameters.install-terraform-dependencies >>
-    steps:
-      - run:
-          name: Install terraform
-          environment:
-            TERRAFORM_VERSION: << parameters.terraform_version >>
-            TERRAFORM_ROOT: << parameters.terraform_root >>
-          command: << include(scripts/install-terraform.sh) >>
-      - run:
-          name: Install terraform-docs
-          environment:
-            TERRAFORM_DOCS_VERSION: << parameters.terraform_docs_version >>
-          command: << include(scripts/install-terraform-docs.sh) >>
-      - run:
-          name: Install tflint
-          environment:
-            TFLINT_VERSION: << parameters.tflint_version >>
-          command: << include(scripts/install-tflint.sh) >>
+  - when:
+      condition: << parameters.install-terraform-dependencies >>
+      steps:
+        - run:
+            name: Install terraform
+            environment:
+              TERRAFORM_VERSION: << parameters.terraform_version >>
+              TERRAFORM_ROOT: << parameters.terraform_root >>
+            command: << include(scripts/install-terraform.sh) >>
+        - run:
+            name: Install terraform-docs
+            environment:
+              TERRAFORM_DOCS_VERSION: << parameters.terraform_docs_version >>
+            command: << include(scripts/install-terraform-docs.sh) >>
+        - run:
+            name: Install tflint
+            environment:
+              TFLINT_VERSION: << parameters.tflint_version >>
+            command: << include(scripts/install-tflint.sh) >>
   - run:
       name: Install pre-commit
       command: |

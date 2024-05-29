@@ -5,7 +5,7 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-if [[ -z "${TERRAFORM_DOCS_VERSION}" ]]; then
+if [[ -z "$TERRAFORM_DOCS_VERSION" ]]; then
   echo "TERRAFORM_DOCS_VERSION is not set. Exiting."
   exit 1
 fi

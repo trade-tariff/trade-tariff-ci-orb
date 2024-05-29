@@ -5,12 +5,12 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-if [[ -z "${TERRAFORM_VERSION}" ]]; then
+if [[ -z "$TERRAFORM_VERSION" ]]; then
   echo "TERRAFORM_VERSION is not set. Exiting."
   exit 1
 fi
 
-if [[ -z "${TERRAFORM_ROOT}" ]]; then
+if [[ -z "$TERRAFORM_ROOT" ]]; then
   echo "TERRAFORM_ROOT is not set. Exiting. This tells us where to initialise the backend"
   exit 1
 fi
@@ -32,6 +32,6 @@ popd
 terraform --version
 
 # Configure the backend
-pushd $TERRAFORM_ROOT
+pushd "$TERRAFORM_ROOT"
 terraform init -backend=false
 popd
