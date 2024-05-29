@@ -1,0 +1,58 @@
+description: >
+  Run pre-commit hooks
+
+parameters:
+  skips:
+    type: string
+    default: "markdownlint-docker,shellcheck,rubocop"
+    description: "List of pre-commit hooks to skip. These are separated by a comma with no spaces"
+  install-terraform-dependencies:
+    type: boolean
+    default: true
+  terraform_root:
+    type: string
+    default: "terraform"
+    description: "The directory to initialise the terraform backend. Typically ./terraform when using ECS based applications."
+  terraform_version:
+    type: string
+    default: 1.8.2
+    description: "The version of Terraform to install."
+  terraform_docs_version:
+    type: string
+    default: 0.17.0
+    description: "The version of terraform-docs to install."
+  tflint_version:
+    type: string
+    default: 0.50.3
+    description: "The version of tflint to install."
+
+steps:
+  - checkout
+  - when: << parameters.install-terraform-dependencies >>
+    steps:
+      - run:
+          name: Install terraform
+          environment:
+            TERRAFORM_VERSION: << parameters.terraform_version >>
+            TERRAFORM_ROOT: << parameters.terraform_root >>
+          command: << include(scripts/install-terraform.sh) >>
+      - run:
+          name: Install terraform-docs
+          environment:
+            TERRAFORM_DOCS_VERSION: << parameters.terraform_docs_version >>
+          command: << include(scripts/install-terraform-docs.sh) >>
+      - run:
+          name: Install tflint
+          environment:
+            TFLINT_VERSION: << parameters.tflint_version >>
+          command: << include(scripts/install-tflint.sh) >>
+  - run:
+      name: Install pre-commit
+      command: |
+        pip install pre-commit
+
+  - run:
+      name: Run pre-commit hooks
+      command: |
+        export SKIP=<< parameters.skips >>
+        pre-commit run --all-files
